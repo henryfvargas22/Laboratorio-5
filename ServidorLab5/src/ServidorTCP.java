@@ -4,7 +4,7 @@ import java.net.*;
 public class ServidorTCP
 {
 
-	public static void main(ServerSocket socket) throws Exception
+	public static void main(ServerSocket socket,int i) throws Exception
 	{
 		String clientSentence;
 		String capitalizedSentence;

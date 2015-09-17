@@ -1,14 +1,10 @@
-import java.awt.FontFormatException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
 
 public class Servidor 
-{
-	private ServidorTCP tcp;
-	private ServidorUDP udp;
-	
+{	
 	public static String HOLA="HOLA";
 	public static String SELECCIONE="SELECCIONE PROTOCOLO";
 	public static String TCP="TCP";
@@ -37,13 +33,13 @@ public class Servidor
 			{
 				System.out.println("Protocolo TCP");
 				s.close();
-				ServidorTCP.main(socket);
+				ServidorTCP.main(socket,i);
 			}
 			else if(linea.equals(UDP))
 			{
 				System.out.println("Protocolo UDP");
 				s.close();
-				
+				ServidorUDP.main(i);
 			}
 
 			i++;
