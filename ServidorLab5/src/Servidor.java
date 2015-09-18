@@ -32,12 +32,14 @@ public class Servidor
 			if(linea.equals(TCP))
 			{
 				System.out.println("Protocolo TCP");
+				System.out.println(s.getInetAddress());
 				s.close();
 				ServidorTCP.main(socket,i);
 			}
 			else if(linea.equals(UDP))
 			{
 				System.out.println("Protocolo UDP");
+				System.out.println(s.getInetAddress());
 				s.close();
 				ServidorUDP.main(i);
 			}
