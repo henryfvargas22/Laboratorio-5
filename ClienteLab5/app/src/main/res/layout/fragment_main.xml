@@ -14,30 +14,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TCP"
-        android:id="@+id/radioButton"
-        android:layout_below="@+id/editText2"
-        android:layout_alignLeft="@+id/radioButton2"
-        android:layout_alignStart="@+id/radioButton2" />
-
-    <RadioButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="UDP"
-        android:id="@+id/radioButton2"
-        android:layout_below="@+id/radioButton"
-        android:layout_alignLeft="@+id/editText" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Iniciar"
         android:id="@+id/button"
-        android:layout_below="@+id/radioButton2"
-        android:layout_alignLeft="@+id/editText" />
+        android:layout_below="@+id/radioGroup"
+        android:layout_centerHorizontal="true"
+        />
 
     <EditText
         android:layout_width="wrap_content"
@@ -54,4 +38,27 @@
         android:hint="Puerto"
         android:layout_below="@+id/editText"
         android:layout_centerHorizontal="true" />
+
+  <RadioGroup
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/radioGroup"
+      android:layout_below="@+id/editText2"
+      android:layout_centerHorizontal="true"
+      >
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TCP"
+        android:id="@+id/radioButton"
+         />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UDP"
+        android:id="@+id/radioButton2"
+        />
+  </RadioGroup>
 </RelativeLayout>
