@@ -26,7 +26,7 @@ public class Servidor
 			{
 				writer.println(SELECCIONE);
 			}
-			
+			Thread.sleep(2000);
 			linea = reader.readLine();
 			
 			if(linea.equals(TCP))
