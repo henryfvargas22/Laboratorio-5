@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -14,6 +15,11 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static String HOLA="HOLA";
+    public static String SELECCIONE="SELECCIONE PROTOCOLO";
+    public static String TCP="TCP";
+    public static String UDP="UDP";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void handshake()
+    {
+        try
+        {
+            Socket cliente=new Socket("hostname",8180);
+            DataOutputStream out=new DataOutputStream(cliente.getOutputStream());
+            BufferedReader in=new BufferedReader(new InputStreamReader(cliente.getInputStream()));
+            out.writeBytes(HOLA);
+            String linea=in.readLine();
+            if(linea.equals(SELECCIONE))
+            {
+                
+            }
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
     public void conectarTCP()
     {
         try {
@@ -51,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             String modifiedSentence;
             BufferedReader inFromUser =
                     new BufferedReader(new InputStreamReader(System.in));
-            Socket clientSocket = new Socket("hostname", 6789);
+            Socket clientSocket = new Socket("hostname", 8180);
             DataOutputStream outToServer =
                     new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer =
@@ -77,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             byte[] sendData = new byte[1024]; byte[] receiveData = new byte[1024];
             String sentence = inFromUser.readLine(); sendData = sentence.getBytes();
             DatagramPacket sendPacket =
-                    new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+                    new DatagramPacket(sendData, sendData.length, IPAddress, 8180);
             clientSocket.send(sendPacket);
             DatagramPacket receivePacket =
                     new DatagramPacket(receiveData, receiveData.length);
@@ -88,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
         catch(Exception e)
         {
-
+            System.out.println("No hubo UDP :(");
         }
     }
 }
