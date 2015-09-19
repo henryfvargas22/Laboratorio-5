@@ -5,6 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.Socket;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -34,5 +42,53 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void conectarTCP()
+    {
+        try {
+            String sentence;
+            String modifiedSentence;
+            BufferedReader inFromUser =
+                    new BufferedReader(new InputStreamReader(System.in));
+            Socket clientSocket = new Socket("hostname", 6789);
+            DataOutputStream outToServer =
+                    new DataOutputStream(clientSocket.getOutputStream());
+            BufferedReader inFromServer =
+                    new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            sentence = inFromUser.readLine(); outToServer.writeBytes(sentence + '\n');
+            modifiedSentence = inFromServer.readLine();
+            System.out.println("FROM SERVER: " + modifiedSentence);
+            clientSocket.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println("No hubo TCP :(");
+        }
+    }
+
+    public void conectarUDP()
+    {
+        try{
+            BufferedReader inFromUser =
+                    new BufferedReader(new InputStreamReader(System.in));
+            DatagramSocket clientSocket = new DatagramSocket();
+            InetAddress IPAddress = InetAddress.getByName("hostname");
+            byte[] sendData = new byte[1024]; byte[] receiveData = new byte[1024];
+            String sentence = inFromUser.readLine(); sendData = sentence.getBytes();
+            DatagramPacket sendPacket =
+                    new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
+            clientSocket.send(sendPacket);
+            DatagramPacket receivePacket =
+                    new DatagramPacket(receiveData, receiveData.length);
+            clientSocket.receive(receivePacket);
+            String modifiedSentence =
+                    new String(receivePacket.getData());
+            System.out.println("FROM SERVER:" + modifiedSentence); clientSocket.close();
+        }
+        catch(Exception e)
+        {
+
+        }
     }
 }
