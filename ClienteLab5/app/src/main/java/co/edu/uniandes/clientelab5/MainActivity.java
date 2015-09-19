@@ -1,5 +1,6 @@
 package co.edu.uniandes.clientelab5;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static String SELECCIONE="SELECCIONE PROTOCOLO";
     public static String TCP="TCP";
     public static String UDP="UDP";
+    public static String IP="10.0.0.2";
 
     private RadioButton radioSele;
     private RadioGroup conexiones;
@@ -38,11 +41,11 @@ public class MainActivity extends AppCompatActivity {
         boton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int id=conexiones.getCheckedRadioButtonId();
+                int id = conexiones.getCheckedRadioButtonId();
 
-                radioSele=(RadioButton)findViewById(id);
+                radioSele = (RadioButton) findViewById(id);
 
-                handshake(radioSele.getText()+"");
+                new clase().execute(radioSele.getText().toString());
             }
         });
     }
@@ -74,21 +77,23 @@ public class MainActivity extends AppCompatActivity {
     {
         try
         {
-            Socket cliente=new Socket("hostname",8180);
-            DataOutputStream out=new DataOutputStream(cliente.getOutputStream());
+            Socket cliente=new Socket(IP,8180);
+            PrintWriter out=new PrintWriter(cliente.getOutputStream(),true);
             BufferedReader in=new BufferedReader(new InputStreamReader(cliente.getInputStream()));
-            out.writeBytes(HOLA);
+            out.println(HOLA);
             String linea=in.readLine();
             if(linea.equals(SELECCIONE))
             {
                 if(boton.equals(TCP))
                 {
-                    out.writeBytes(TCP);
+                    out.println(TCP);
+                    cliente.close();
                     conectarTCP();
                 }
                 else if(boton.equals(UDP))
                 {
-                    out.writeBytes(UDP);
+                    out.println(UDP);
+                    cliente.close();
                     conectarUDP();
                 }
             }
@@ -103,16 +108,17 @@ public class MainActivity extends AppCompatActivity {
     public void conectarTCP()
     {
         try {
-            String sentence;
+            String sentence="holi";
             String modifiedSentence;
             BufferedReader inFromUser =
                     new BufferedReader(new InputStreamReader(System.in));
-            Socket clientSocket = new Socket("hostname", 8180);
+            Socket clientSocket = new Socket(IP, 8180);
             DataOutputStream outToServer =
                     new DataOutputStream(clientSocket.getOutputStream());
             BufferedReader inFromServer =
                     new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            sentence = inFromUser.readLine(); outToServer.writeBytes(sentence + '\n');
+            sentence = inFromUser.readLine();
+            outToServer.writeBytes(sentence + '\n');
             modifiedSentence = inFromServer.readLine();
             System.out.println("FROM SERVER: " + modifiedSentence);
             clientSocket.close();
@@ -129,8 +135,9 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader inFromUser =
                     new BufferedReader(new InputStreamReader(System.in));
             DatagramSocket clientSocket = new DatagramSocket();
-            InetAddress IPAddress = InetAddress.getByName("hostname");
-            byte[] sendData = new byte[1024]; byte[] receiveData = new byte[1024];
+            InetAddress IPAddress = InetAddress.getByName(IP);
+            byte[] sendData = new byte[1024];
+            byte[] receiveData = new byte[1024];
             String sentence = inFromUser.readLine(); sendData = sentence.getBytes();
             DatagramPacket sendPacket =
                     new DatagramPacket(sendData, sendData.length, IPAddress, 8180);
@@ -145,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
         catch(Exception e)
         {
             System.out.println("No hubo UDP :(");
+        }
+    }
+
+    private class clase extends AsyncTask<String,String,String>
+    {
+
+        @Override
+        protected String doInBackground(String... params) {
+            handshake(params[0]);
+            return "";
         }
     }
 }
