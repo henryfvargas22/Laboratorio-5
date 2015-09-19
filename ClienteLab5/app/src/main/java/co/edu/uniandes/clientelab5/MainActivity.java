@@ -4,6 +4,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -21,10 +25,26 @@ public class MainActivity extends AppCompatActivity {
     public static String TCP="TCP";
     public static String UDP="UDP";
 
+    private RadioButton radioSele;
+    private RadioGroup conexiones;
+    private Button  boton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        conexiones=(RadioGroup)findViewById(R.id.radioGroup);
+        boton=(Button)findViewById(R.id.button);
+        boton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id=conexiones.getCheckedRadioButtonId();
+
+                radioSele=(RadioButton)findViewById(id);
+
+                handshake(radioSele.getText()+"");
+            }
+        });
     }
 
 
@@ -50,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void handshake()
+    public void handshake(String boton)
     {
         try
         {
@@ -61,7 +81,16 @@ public class MainActivity extends AppCompatActivity {
             String linea=in.readLine();
             if(linea.equals(SELECCIONE))
             {
-                
+                if(boton.equals(TCP))
+                {
+                    out.writeBytes(TCP);
+                    conectarTCP();
+                }
+                else if(boton.equals(UDP))
+                {
+                    out.writeBytes(UDP);
+                    conectarUDP();
+                }
             }
 
         }
