@@ -87,8 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 if(boton.equals(TCP))
                 {
                     out.println(TCP);
-                    cliente.close();
-                    conectarTCP();
+                    out.println("Prueba");
                 }
                 else if(boton.equals(UDP))
                 {
@@ -97,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     conectarUDP();
                 }
             }
-
         }
         catch (IOException e)
         {
@@ -105,48 +103,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void conectarTCP()
-    {
-        try {
-            String sentence="holi";
-            String modifiedSentence;
-            BufferedReader inFromUser =
-                    new BufferedReader(new InputStreamReader(System.in));
-            Socket clientSocket = new Socket(IP, 8180);
-            DataOutputStream outToServer =
-                    new DataOutputStream(clientSocket.getOutputStream());
-            BufferedReader inFromServer =
-                    new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            sentence = inFromUser.readLine();
-            outToServer.writeBytes(sentence + '\n');
-            modifiedSentence = inFromServer.readLine();
-            System.out.println("FROM SERVER: " + modifiedSentence);
-            clientSocket.close();
-        }
-        catch(Exception e)
-        {
-            System.out.println("No hubo TCP :(");
-        }
-    }
-
     public void conectarUDP()
     {
         try{
-            BufferedReader inFromUser =
-                    new BufferedReader(new InputStreamReader(System.in));
             DatagramSocket clientSocket = new DatagramSocket();
             InetAddress IPAddress = InetAddress.getByName(IP);
             byte[] sendData = new byte[1024];
             byte[] receiveData = new byte[1024];
-            String sentence = inFromUser.readLine(); sendData = sentence.getBytes();
-            DatagramPacket sendPacket =
-                    new DatagramPacket(sendData, sendData.length, IPAddress, 8180);
+            String sentence = "HolaUDP";
+            sendData = sentence.getBytes();
+            DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 8180);
             clientSocket.send(sendPacket);
-            DatagramPacket receivePacket =
-                    new DatagramPacket(receiveData, receiveData.length);
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             clientSocket.receive(receivePacket);
-            String modifiedSentence =
-                    new String(receivePacket.getData());
+            String modifiedSentence = new String(receivePacket.getData());
             System.out.println("FROM SERVER:" + modifiedSentence); clientSocket.close();
         }
         catch(Exception e)
