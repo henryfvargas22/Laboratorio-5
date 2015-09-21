@@ -23,6 +23,15 @@
         android:layout_centerHorizontal="true"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Parar"
+        android:id="@+id/button2"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,4 +70,12 @@
         android:id="@+id/radioButton2"
         />
   </RadioGroup>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:singleLine="false" />
 </RelativeLayout>
