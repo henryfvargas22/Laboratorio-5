@@ -43,7 +43,7 @@ public class Servidor
 				System.out.println(s.getInetAddress());
 				String lineaCliente=reader.readLine();
 				System.out.println(lineaCliente);
-				csv += "Thread No. "+i+" Protocolo: "+TCP+" Mensaje: "+lineaCliente+"."+"\n";
+				csv += "Thread No. "+i+" Protocolo: "+TCP+" "+lineaCliente+"."+"\n";
 				System.out.println("CSV: "+csv);
 				guardar();
 				s.close();
